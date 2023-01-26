@@ -28,8 +28,8 @@ ufw allow $SDM_LISTEN_PORT/tcp
 ufw --force enable
 
 # Create the strongdm user with a home directory and grant it sudo privileges
-useradd -m strongdm
-usermod -aG sudo strongdm
+sudo useradd -m strongdm
+sudo usermod -aG sudo strongdm
 
 # Download the strongDM gateway binary and unzip it
 curl -J -O -L https://app.strongdm.com/releases/cli/linux
@@ -50,7 +50,7 @@ export INSTANCE_FRIENDLY_NAME=`curl -H "X-aws-ec2-metadata-token: $IMDS_TOKEN" h
 export SDM_RELAY_TOKEN=`./sdm admin relays create-gateway $INSTANCE_PUBLIC_IP:$SDM_LISTEN_PORT 0.0.0.0:$SDM_LISTEN_PORT --name $INSTANCE_FRIENDLY_NAME --tags instance=$INSTANCE_ID`
 export SDM_CA_PUB=`./sdm admin ssh view-ca`
 unset SDM_ADMIN_TOKEN
-./sdm install --relay --user strongdm
+sudo ./sdm install --relay --user strongdm
 
 # Add the public certificate from your strongDM tenant to the sshd config of the gateway
 echo $SDM_CA_PUB | tee -a /etc/ssh/sdm_ca.pub
