@@ -3,6 +3,10 @@
 # Your EC2 instance should have a public IPv4 address and a security group rule that allows 5000/tcp from 0.0.0.0/0
 # Your EC2 instance should also have a friendly name that contains only digits, lowercase characters, and/or - (dash/tack)
 
+# Update the package repository; install jq and unzip
+apt update
+apt install jq unzip -y
+
 #install awscli for secrets pull
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
@@ -17,10 +21,6 @@ export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/meta-data/plac
 export SDM_ADMIN_TOKEN=$(aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:us-east-1:478603337655:secret:/jmor/testorg/sdm_admin_token-UNkaiK | jq --raw-output .SecretString | jq -r ."sdm_admin_token")
 export SDM_LISTEN_PORT=5000
 export SSH_USERNAME=ubuntu
-
-# Update the package repository; install jq and unzip
-apt update
-apt install jq unzip -y
 
 # Configure inbound host firewall rules for ssh and strongDM gateway traffic
 ufw allow ssh
